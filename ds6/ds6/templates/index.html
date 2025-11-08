@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadeFit - Complete Beauty & Fashion Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-styles.css') }}">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>ShadeFit</h1>
+                    <p>Complete Beauty & Fashion Platform</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                <button class="nav-btn" data-section="analysis">
+                    <i class="fas fa-magic"></i>
+                    <span>Analysis</span>
+                </button>
+                <button class="nav-btn" data-section="products">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>Products</span>
+                </button>
+                <button class="nav-btn" data-section="clothing">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Clothing</span>
+                </button>
+                <button class="nav-btn" data-section="dashboard">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-btn" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h2>Discover Your Perfect Style Match</h2>
+                        <p>AI-powered skin analysis for personalized beauty and fashion recommendations</p>
+                        
+                        <div class="stats-bar">
+                            <div class="stat-item">
+                                <i class="fas fa-users"></i>
+                                <span class="stat-number">50K+</span>
+                                <span class="stat-label">Happy Users</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-palette"></i>
+                                <span class="stat-number">1000+</span>
+                                <span class="stat-label">Style Matches</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-star"></i>
+                                <span class="stat-number">4.9</span>
+                                <span class="stat-label">Rating</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="action-card" onclick="app.switchSection('analysis')">
+                            <i class="fas fa-magic"></i>
+                            <h3>Skin Analysis</h3>
+                            <p>Get AI-powered skin tone analysis</p>
+                        </div>
+                        <div class="action-card" onclick="app.switchSection('products')">
+                            <i class="fas fa-shopping-bag"></i>
+                            <h3>Beauty Products</h3>
+                            <p>Discover perfect makeup matches</p>
+                        </div>
+                        <div class="action-card" onclick="app.switchSection('clothing')">
+                            <i class="fas fa-tshirt"></i>
+                            <h3>Fashion Advice</h3>
+                            <p>Find clothes that suit your tone</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section id="analysis" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-magic"></i> AI Skin Tone Analysis</h2>
+                </div>
+                
+                <div class="analysis-container">
+                    <div class="camera-section">
+                        <div class="camera-container">
+                            <video id="camera" autoplay playsinline style="display: none;"></video>
+                            <canvas id="canvas" style="display: none;"></canvas>
+                            <div class="camera-placeholder" id="camera-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <p>Start camera or upload photo for analysis</p>
+                            </div>
+                        </div>
+                        
+                        <div class="controls">
+                            <button id="start-camera" class="btn-primary">
+                                <i class="fas fa-video"></i>
+                                Start Camera
+                            </button>
+                            <button id="capture" class="btn-primary" style="display: none;">
+                                <i class="fas fa-magic"></i>
+                                Analyze Skin Tone
+                            </button>
+                            <input type="file" id="upload" accept="image/*" style="display: none;">
+                            <button id="upload-btn" class="btn-secondary">
+                                <i class="fas fa-upload"></i>
+                                Upload Photo
+                            </button>
+                            <button id="demo-btn" class="btn-tertiary">
+                                <i class="fas fa-play"></i>
+                                Try Demo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="results" class="results-container" style="display: none;">
+                    <div class="results-header">
+                        <h3><i class="fas fa-chart-pie"></i> Your Skin Analysis Results</h3>
+                        <div class="confidence-score">
+                            <span class="score-label">Accuracy:</span>
+                            <div class="score-bar">
+                                <div class="score-fill" id="confidence-fill"></div>
+                            </div>
+                            <span class="score-value" id="confidence-value">95%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-grid">
+                        <div class="color-info">
+                            <div class="color-display">
+                                <div class="color-swatch" id="dominant-color"></div>
+                                <div class="color-variations">
+                                    <div class="variation-swatch" id="lighter-shade"></div>
+                                    <div class="variation-swatch" id="darker-shade"></div>
+                                </div>
+                            </div>
+                            <div class="color-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-tag"></i>
+                                    <span class="label">Skin Tone:</span>
+                                    <span class="value" id="tone-category"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-palette"></i>
+                                    <span class="label">Undertone:</span>
+                                    <span class="value" id="undertone"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-hashtag"></i>
+                                    <span class="label">HEX:</span>
+                                    <span class="value" id="hex-value"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-code"></i>
+                                    <span class="label">RGB:</span>
+                                    <span class="value" id="rgb-value"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendations">
+                            <h4><i class="fas fa-magic"></i> Perfect Matches</h4>
+                            <div id="shade-recommendations"></div>
+                            <div class="recommendation-actions">
+                                <button class="btn-primary" id="save-analysis">
+                                    <i class="fas fa-save"></i>
+                                    Save Analysis
+                                </button>
+                                <button class="btn-secondary" id="view-products">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    View Products
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="seasonal-tips">
+                        <h4><i class="fas fa-leaf"></i> Seasonal Beauty Tips</h4>
+                        <div class="tips-grid" id="seasonal-tips"></div>
+                    </div>
+                    
+                    <div class="color-harmony">
+                        <h4><i class="fas fa-palette"></i> Color Harmony Analysis</h4>
+                        <div class="harmony-grid" id="color-harmony"></div>
+                    </div>
+                    
+                    <div class="trend-insights">
+                        <h4><i class="fas fa-trending-up"></i> Current Trends for Your Tone</h4>
+                        <div class="trends-grid" id="trend-insights"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-shopping-bag"></i> Beauty Products</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters-section">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label><i class="fas fa-building"></i> Brand</label>
+                            <select id="brand-filter">
+                                <option value="">All Brands</option>
+                                <option value="fenty">Fenty Beauty</option>
+                                <option value="rare">Rare Beauty</option>
+                                <option value="nars">NARS</option>
+                                <option value="mac">MAC</option>
+                                <option value="charlotte">Charlotte Tilbury</option>
+                                <option value="dior">Dior</option>
+                                <option value="urban">Urban Decay</option>
+                                <option value="glossier">Glossier</option>
+                                <option value="kylie">Kylie Cosmetics</option>
+                                <option value="tarte">Tarte</option>
+                                <option value="ordinary">The Ordinary</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-rupee-sign"></i> Price</label>
+                            <select id="price-filter">
+                                <option value="">All Prices</option>
+                                <option value="0-1000">Under ₹1,000</option>
+                                <option value="1000-2000">₹1,000-₹2,000</option>
+                                <option value="2000-3000">₹2,000-₹3,000</option>
+                                <option value="3000-5000">₹3,000-₹5,000</option>
+                                <option value="5000+">Above ₹5,000</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-star"></i> Rating</label>
+                            <select id="rating-filter">
+                                <option value="">All Ratings</option>
+                                <option value="4+">4+ Stars</option>
+                                <option value="4.5+">4.5+ Stars</option>
+                                <option value="4.8+">4.8+ Stars</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-layer-group"></i> Category</label>
+                            <select id="category-filter">
+                                <option value="">All Categories</option>
+                                <option value="foundation">Foundation</option>
+                                <option value="lipstick">Lipstick</option>
+                                <option value="blush">Blush</option>
+                                <option value="eyeshadow">Eyeshadow</option>
+                                <option value="concealer">Concealer</option>
+                                <option value="highlighter">Highlighter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="product-search" placeholder="Search products...">
+                    </div>
+                </div>
+                
+                <div class="product-grid" id="product-grid"></div>
+            </section>
+
+            <!-- Clothing Section -->
+            <section id="clothing" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-tshirt"></i> Fashion Recommendations</h2>
+                    <div class="style-toggle">
+                        <button class="style-btn active" data-style="casual">Casual</button>
+                        <button class="style-btn" data-style="formal">Formal</button>
+                        <button class="style-btn" data-style="party">Party</button>
+                        <button class="style-btn" data-style="traditional">Traditional</button>
+                        <button class="style-btn" data-style="all">All Styles</button>
+                    </div>
+                </div>
+                
+                <div class="clothing-analysis" id="clothing-analysis" style="display: none;">
+                    <div class="analysis-header">
+                        <h3><i class="fas fa-palette"></i> Your Color Analysis</h3>
+                        <div class="skin-tone-display">
+                            <div class="tone-swatch" id="clothing-tone-swatch"></div>
+                            <div class="tone-info">
+                                <span class="tone-category" id="clothing-tone-category"></span>
+                                <span class="tone-undertone" id="clothing-tone-undertone"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="color-recommendations">
+                        <div class="color-section">
+                            <h4><i class="fas fa-star"></i> Best Colors for You</h4>
+                            <div class="color-palette" id="best-colors"></div>
+                        </div>
+                        <div class="color-section">
+                            <h4><i class="fas fa-times-circle"></i> Colors to Avoid</h4>
+                            <div class="color-palette" id="avoid-colors"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clothing-grid" id="clothing-grid">
+                    <div class="no-analysis">
+                        <i class="fas fa-magic" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                        <h3>Complete Skin Analysis First</h3>
+                        <p>Get personalized clothing recommendations based on your skin tone</p>
+                        <button class="btn-primary" onclick="app.switchSection('analysis')">
+                            <i class="fas fa-magic"></i>
+                            Start Analysis
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced Dashboard Section -->
+            <section id="dashboard" class="section">
+                <div class="dashboard-header glass-morphism premium-hover">
+                    <h2 class="holographic"><i class="fas fa-chart-bar neon-glow"></i> Analytics Dashboard</h2>
+                    <div class="dashboard-controls">
+                        <select id="dashboard-period" class="glass-morphism">
+                            <option value="week">Last 7 Days</option>
+                            <option value="month" selected>Last 30 Days</option>
+                            <option value="year">Last Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                        <button class="btn-secondary magnetic-btn ripple" id="export-dashboard">
+                            <i class="fas fa-download"></i>
+                            Export Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-overview">
+                    <div class="overview-card glass-morphism premium-hover breathing stagger-item">
+                        <div class="card-icon">
+                            <i class="fas fa-magic color-shift"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 id="total-analyses" class="holographic">0</h3>
+                            <p>Total Analyses</p>
+                            <span class="trend positive glowing-badge" id="analyses-trend">+12% this month</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </div>
+                    <div class="overview-card glass-morphism premium-hover breathing stagger-item">
+                        <div class="card-icon">
+                            <i class="fas fa-heart color-shift"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 id="total-wishlist" class="holographic">0</h3>
+                            <p>Wishlist Items</p>
+                            <span class="trend positive glowing-badge" id="wishlist-trend">+5 new items</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </div>
+                    <div class="overview-card glass-morphism premium-hover breathing stagger-item">
+                        <div class="card-icon">
+                            <i class="fas fa-trophy color-shift"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 id="total-points" class="holographic">0</h3>
+                            <p>Reward Points</p>
+                            <span class="trend positive glowing-badge" id="points-trend">+50 this week</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </div>
+                    <div class="overview-card glass-morphism premium-hover breathing stagger-item">
+                        <div class="card-icon">
+                            <i class="fas fa-clock color-shift"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 id="session-time" class="holographic">0m</h3>
+                            <p>Session Time</p>
+                            <span class="trend neutral glowing-badge" id="time-trend">Current session</span>
+                        </div>
+                        <div class="card-glow"></div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-charts">
+                    <div class="chart-container glass-morphism premium-hover tilt-3d">
+                        <h3 class="holographic"><i class="fas fa-chart-line neon-glow"></i> Skin Tone Analysis Trends</h3>
+                        <canvas id="analysis-chart" width="400" height="200"></canvas>
+                        <div class="chart-overlay"></div>
+                    </div>
+                    <div class="chart-container glass-morphism premium-hover tilt-3d">
+                        <h3 class="holographic"><i class="fas fa-pie-chart neon-glow"></i> Most Popular Categories</h3>
+                        <div class="category-stats" id="category-stats"></div>
+                        <div class="chart-overlay"></div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-insights">
+                    <div class="insight-card glass-morphism premium-hover liquid-shape">
+                        <h4 class="holographic"><i class="fas fa-lightbulb neon-glow"></i> Personal Insights</h4>
+                        <div id="personal-insights" class="insight-content"></div>
+                        <div class="insight-glow"></div>
+                    </div>
+                    <div class="insight-card glass-morphism premium-hover liquid-shape">
+                        <h4 class="holographic"><i class="fas fa-trending-up neon-glow"></i> Smart Recommendations</h4>
+                        <div id="dashboard-recommendations" class="insight-content"></div>
+                        <div class="insight-glow"></div>
+                    </div>
+                </div>
+                
+                <div class="recent-activity glass-morphism premium-hover">
+                    <h3 class="holographic"><i class="fas fa-history neon-glow"></i> Recent Activity</h3>
+                    <div class="activity-timeline" id="activity-timeline"></div>
+                    <div class="activity-glow"></div>
+                </div>
+                
+                <!-- Dashboard Particles -->
+                <div class="dashboard-particles">
+                    <div class="dashboard-particle" style="left: 5%; animation-delay: 0s;"></div>
+                    <div class="dashboard-particle" style="left: 15%; animation-delay: 1s;"></div>
+                    <div class="dashboard-particle" style="left: 25%; animation-delay: 2s;"></div>
+                    <div class="dashboard-particle" style="left: 35%; animation-delay: 3s;"></div>
+                    <div class="dashboard-particle" style="left: 45%; animation-delay: 4s;"></div>
+                    <div class="dashboard-particle" style="left: 55%; animation-delay: 5s;"></div>
+                    <div class="dashboard-particle" style="left: 65%; animation-delay: 6s;"></div>
+                    <div class="dashboard-particle" style="left: 75%; animation-delay: 7s;"></div>
+                    <div class="dashboard-particle" style="left: 85%; animation-delay: 8s;"></div>
+                    <div class="dashboard-particle" style="left: 95%; animation-delay: 9s;"></div>
+                </div>
+            </section>
+            
+            <!-- Profile Section -->
+            <section id="profile" class="section">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2>Your Beauty Profile</h2>
+                        <p class="profile-subtitle">Track your beauty journey and preferences</p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="analyses-count">0</span>
+                            <span class="stat-label">Analyses</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="wishlist-count">0</span>
+                            <span class="stat-label">Wishlist Items</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="points-count">0</span>
+                            <span class="stat-label">Reward Points</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-content">
+                    <div class="skin-profile">
+                        <div class="section-title">
+                            <h3><i class="fas fa-history"></i> Analysis History</h3>
+                            <button class="btn-tertiary" id="export-history">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                        <div id="skin-history"></div>
+                    </div>
+                    <div class="saved-products">
+                        <div class="section-title">
+                            <h3><i class="fas fa-bookmark"></i> Saved Items</h3>
+                            <button class="btn-tertiary" id="clear-wishlist">
+                                <i class="fas fa-trash"></i>
+                                Clear All
+                            </button>
+                        </div>
+                        <div id="saved-items"></div>
+                    </div>
+                </div>
+                
+                <div class="achievements">
+                    <h3><i class="fas fa-medal"></i> Achievements</h3>
+                    <div class="achievement-grid" id="achievements-grid"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Notifications -->
+        <div class="notification-container" id="notifications"></div>
+        
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loading-overlay" style="display: none;">
+            <div class="loading-spinner">
+                <i class="fas fa-magic fa-spin"></i>
+                <p>Processing...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='enhanced-features.js') }}"></script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='ar-features.js') }}"></script>
+    <script src="{{ url_for('static', filename='pwa-installer.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
